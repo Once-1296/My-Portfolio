@@ -18,6 +18,6 @@ app.use("/api/codeforces", codeforcesRouter);
 app.use("/api/email", emailRouter);
 
 export default app
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
