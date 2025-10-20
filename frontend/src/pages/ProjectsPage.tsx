@@ -8,8 +8,8 @@ const Projects: React.FC = () => {
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
         <div className="p-6 border rounded-xl shadow hover:shadow-lg transition">
           <h3 className="text-xl font-bold mb-2">TRAIN YOUR FOES</h3>
-<img src="../../assets/TYF1.png" alt="Game Screenshot"></img>
-    <img src="../../assets/TYF2.jpeg" alt="Game Screenshot"></img>
+<img src="/assets/TYF1.png" alt="Game Screenshot"></img>
+    <img src="/assets/TYF2.jpeg" alt="Game Screenshot"></img>
 <a target ="_blank" href="https://github.com/AvanishSalunke/TRAIN-YOUR-FOES" className="underline">Repository </a>
 <hr></hr>
 <a target ="_blank" href="https://avanishsalunke.github.io/TRAIN-YOUR-FOES/" className="underline">Documentation site</a>
@@ -32,8 +32,8 @@ Each stage is a trial, designed to hone your skills for the final, inevitable co
 
         <div className="p-6 border rounded-xl shadow hover:shadow-lg transition">
           <h3 className="text-xl font-bold mb-2">ENDLESS CAR HIGHWAY</h3>
-    <img src="../../assets/ECH1.png" alt="Game Screenshot"></img>
-    <img src="../../assets/ECH2.png" alt="Game Screenshot"></img>
+    <img src="/assets/ECH1.png" alt="Game Screenshot"></img>
+    <img src="/assets/ECH2.png" alt="Game Screenshot"></img>
 <a target ="_blank" href="https://github.com/Once-1296/car-game" className="underline">Repository </a>
 <hr></hr>
 <a target ="_blank" href="https://once-1296.github.io/car-game/" className="underline">Documentation site</a>
