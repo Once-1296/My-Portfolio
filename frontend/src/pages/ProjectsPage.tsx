@@ -15,7 +15,7 @@ const Projects: React.FC = () => {
 <a target ="_blank" href="https://avanishsalunke.github.io/TRAIN-YOUR-FOES/" className="underline">Documentation site</a>
   <hr></hr>        <p className="text-gray-600 mb-3">
 This Project was made in gracious Collaboration with 
-<a target ="_blank" href="https://github.com/AvanishSalunke" className="underline">Avanish Salunke</a> and  
+<a target ="_blank" href="https://github.com/AvanishSalunke" className="underline"> Avanish Salunke</a> and  
 <a target ="_blank" href ="https://github.com/AsparkArcane"  className="underline"> Nathan Dsouza</a> under the extremely appreciated guidance of our VJTI seniors 
 <a target ="_blank" href="https://github.com/Abhay-Varnekar" className="underline"> Abhay Varnekar </a> and 
 <a target ="_blank" href ="https://github.com/Ishaan0132"  className="underline"> Ishaan Shaikh </a> 
