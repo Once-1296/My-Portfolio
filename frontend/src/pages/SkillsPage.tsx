@@ -27,10 +27,10 @@ const Skills: React.FC = () => {
       try {
         const [lcRes, cfRes] = await Promise.all([
 // LeetCode fetch
-fetch("https://my-portfolio-ngxvjh46r-awwab-wadekars-projects.vercel.app/api/leetcode/Awwabcoder23"),
+fetch("https://my-portfolio-lac-kappa-74.vercel.app/api/leetcode/Awwabcoder23"),
 
 // Codeforces fetch
-fetch("https://my-portfolio-ngxvjh46r-awwab-wadekars-projects.vercel.app/api/codeforces/Awwab_coder123"),
+fetch("https://my-portfolio-lac-kappa-74.vercel.app/api/codeforces/Awwab_coder123"),
           //fetch("http://localhost:5000/api/leetcode/Awwabcoder23"),
           //fetch("http://localhost:5000/api/codeforces/Awwab_coder123"),
         ]);
