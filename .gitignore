@@ -2,3 +2,4 @@
 *.env
 *backup.txt
 backend
+*node_modules
