@@ -27,12 +27,12 @@ const Skills: React.FC = () => {
       try {
         const [lcRes, cfRes] = await Promise.all([
 // LeetCode fetch
-fetch("api/leetcode/Awwabcoder23"),
+// fetch("api/leetcode/Awwabcoder23"),
 
-// Codeforces fetch
-fetch("api/codeforces/Awwab_coder123"),
-          //fetch("http://localhost:5000/api/leetcode/Awwabcoder23"),
-          //fetch("http://localhost:5000/api/codeforces/Awwab_coder123"),
+// // Codeforces fetch
+// fetch("api/codeforces/Awwab_coder123"),
+          fetch("http://localhost:5000/api/leetcode/Awwabcoder23"),
+          fetch("http://localhost:5000/api/codeforces/Awwab_coder123"),
         ]);
 
         const lcData = await lcRes.json();
