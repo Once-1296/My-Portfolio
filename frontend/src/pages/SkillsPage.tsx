@@ -1,59 +1,100 @@
-
-   
+// frontend/src/pages/SkillsPage.tsx
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-interface LeetCodeData {
-  totalSolved: number;
-  easySolved: number;
-  mediumSolved: number;
-  hardSolved: number;
-}
-
-interface CodeforcesData {
+interface LCStats {
+  solved: {
+    All: number;
+    Easy: number;
+    Medium: number;
+    Hard: number;
+  };
   rating: number;
-  rank: string;
-  maxRating: number;
-  maxRank: string;
 }
 
-const SkillsPage: React.FC = () => {
-  const [leetcode, setLeetcode] = useState<LeetCodeData | null>(null);
-  const [codeforces, setCodeforces] = useState<CodeforcesData | null>(null);
+interface CFStats {
+  rating: number;
+  maxRating?: number;
+  rank?: string;
+}
+
+const Skills: React.FC = () => {
+  const [lcStats, setLcStats] = useState<LCStats | null>(null);
+  const [cfStats, setCfStats] = useState<CFStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchLeetCodeStats = async () => {
+      const query = `
+        query getUserProfile($username: String!) {
+          matchedUser(username: $username) {
+            username
+            submitStatsGlobal {
+              acSubmissionNum {
+                difficulty
+                count
+              }
+            }
+          }
+            userContestRanking {
+              rating
+            }
+        }
+      `;
       try {
-        // 🟩 Use relative paths so it works in localhost & production (Vercel)
-        const [lcRes, cfRes] = await Promise.all([
-          fetch("/api/leetcode/Awwabcoder23"),
-          fetch("/api/codeforces/Awwab_coder123"),
-        ]);
-
-        if (!lcRes.ok || !cfRes.ok) throw new Error("API request failed");
-
-        const lcData = await lcRes.json();
-        const cfData = await cfRes.json();
-
-        setLeetcode(lcData);
-        setCodeforces(cfData);
+        const res = await axios.post("https://leetcode.com/graphql", {
+          query,
+          variables: { username: "Awwabcoder23" },
+        });
+        const data = res.data.data.matchedUser;
+        const solved = data.submitStatsGlobal.acSubmissionNum.reduce(
+          (acc: any, item: any) => {
+            acc[item.difficulty] = item.count;
+            return acc;
+          },
+          {}
+        );
+        return {
+          solved,
+          rating: res.data.data.userContestRanking?.rating || 0,
+        };
       } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Failed to load coding stats.");
-      } finally {
-        setLoading(false);
+        console.error("❌ Error fetching LeetCode stats:", err);
+        return null;
       }
+    };
+
+    const fetchCodeforcesStats = async () => {
+      try {
+        const res = await fetch(
+          "https://codeforces.com/api/user.info?handles=Awwab_coder123"
+        );
+        const data = await res.json();
+        const user = data.result[0];
+        return {
+          rating: user.rating,
+          maxRating: user.maxRating,
+          rank: user.rank,
+        };
+      } catch (err) {
+        console.error("❌ Error fetching Codeforces stats:", err);
+        return null;
+      }
+    };
+
+    const fetchStats = async () => {
+      setLoading(true);
+      const [lc, cf] = await Promise.all([fetchLeetCodeStats(), fetchCodeforcesStats()]);
+      setLcStats(lc);
+      setCfStats(cf);
+      setLoading(false);
     };
 
     fetchStats();
   }, []);
 
-  if (loading) return <p className="text-center text-gray-400">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
-
   return (
-     <main className="container mx-auto px-6 py-12">
+    <main className="container mx-auto px-6 py-12">
       <h2 className="text-3xl font-bold mb-8">Skills</h2>
 
       {/* Technical Skills */}
@@ -78,63 +119,44 @@ const SkillsPage: React.FC = () => {
           </ul>
         </div>
       </section>
-    <div className="p-8 text-white bg-gray-900 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Coding Profiles</h1>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* 🟧 LeetCode Card */}
-        <div className="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700">
-          <h2 className="text-2xl font-semibold text-yellow-400 mb-3">
-            LeetCode
-          </h2>
-          {leetcode ? (
-            <ul className="space-y-2">
-              <li>Total Solved: {leetcode.totalSolved}</li>
-              <li>Easy: {leetcode.easySolved}</li>
-              <li>Medium: {leetcode.mediumSolved}</li>
-              <li>Hard: {leetcode.hardSolved}</li>
-            </ul>
+      {/* LeetCode + Codeforces Section */}
+      <section className="border-t border-gray-300 pt-6">
+        <h3 className="text-xl font-semibold mb-4">Coding Profiles</h3>
+        <div className="bg-gray-50 p-4 rounded-lg shadow">
+          {loading ? (
+            <p className="text-gray-500">Loading stats...</p>
           ) : (
-            <p>Unable to load data</p>
-          )}
-          <a
-            href="https://leetcode.com/Awwabcoder23/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-4 text-yellow-400 hover:text-yellow-300"
-          >
-            View Profile →
-          </a>
-        </div>
+            <>
+              <p className="text-gray-600 mb-3">LeetCode Stats</p>
+              {lcStats ? (
+                <div className="flex flex-col gap-2 mb-3">
+                  <p>Rating: {lcStats.rating}</p>
+                  <div>All: {lcStats.solved.All}</div>
+                  <div>Easy: {lcStats.solved.Easy}</div>
+                  <div>Medium: {lcStats.solved.Medium}</div>
+                  <div>Hard: {lcStats.solved.Hard}</div>
+                </div>
+              ) : (
+                <p className="text-red-500">Failed to load LeetCode stats</p>
+              )}
 
-        {/* 🟦 Codeforces Card */}
-        <div className="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700">
-          <h2 className="text-2xl font-semibold text-blue-400 mb-3">
-            Codeforces
-          </h2>
-          {codeforces ? (
-            <ul className="space-y-2">
-              <li>Rating: {codeforces.rating}</li>
-              <li>Rank: {codeforces.rank}</li>
-              <li>Max Rating: {codeforces.maxRating}</li>
-              <li>Max Rank: {codeforces.maxRank}</li>
-            </ul>
-          ) : (
-            <p>Unable to load data</p>
+              <p className="text-gray-600 mb-3">Codeforces Stats</p>
+              {cfStats ? (
+                <div>
+                  <p>
+                    Rating: {cfStats.rating} | Max: {cfStats.maxRating} | Rank: {cfStats.rank}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-red-500">Failed to load Codeforces stats</p>
+              )}
+            </>
           )}
-          <a
-            href="https://codeforces.com/profile/Awwab_coder123"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-4 text-blue-400 hover:text-blue-300"
-          >
-            View Profile →
-          </a>
         </div>
-      </div>
-    </div>
+      </section>
     </main>
   );
 };
 
-export default SkillsPage;
+export default Skills;
