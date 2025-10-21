@@ -63,44 +63,7 @@ const Contact: React.FC = () => {
           </ul>
         </div>
 
-        <div>
-          <h3 className="text-xl font-bold mb-4">Send a Message</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-white border border-gray-700 focus:outline-none"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={form.email}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-white border border-gray-700 focus:outline-none"
-            />
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              value={form.message}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-white border border-gray-700 h-32 focus:outline-none"
-            />
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
-            >
-              {status === "sending" ? "Sending..." : "Send"}
-            </button>
-          </form>
-
-          {status === "success" && <p className="text-green-500 mt-3">✅ Message sent successfully!</p>}
-          {status === "error" && <p className="text-red-500 mt-3">❌ Something went wrong. Please try again.</p>}
-        </div>
+        
       </div>
     </main>
   );

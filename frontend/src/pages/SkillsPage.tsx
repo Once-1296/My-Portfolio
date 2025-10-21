@@ -1,6 +1,7 @@
 // frontend/src/pages/SkillsPage.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import LeetCodeStatsComponent from '../components/Leetcodestats'
 
 interface LCStats {
   solved: {
@@ -129,17 +130,7 @@ const Skills: React.FC = () => {
           ) : (
             <>
               <p className="text-gray-600 mb-3">LeetCode Stats</p>
-              {lcStats ? (
-                <div className="flex flex-col gap-2 mb-3">
-                  <p>Rating: {lcStats.rating}</p>
-                  <div>All: {lcStats.solved.All}</div>
-                  <div>Easy: {lcStats.solved.Easy}</div>
-                  <div>Medium: {lcStats.solved.Medium}</div>
-                  <div>Hard: {lcStats.solved.Hard}</div>
-                </div>
-              ) : (
-                <p className="text-red-500">Failed to load LeetCode stats</p>
-              )}
+              <LeetCodeStatsComponent/>
 
               <p className="text-gray-600 mb-3">Codeforces Stats</p>
               {cfStats ? (
