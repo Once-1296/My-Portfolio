@@ -1,9 +1,9 @@
 // frontend/src/pages/ContactPage.tsx
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-console.log("Contact component module loaded");
+//console.log("Contact component module loaded");
 const Contact: React.FC = () => {
-console.log("Contact component rendered");
+//console.log("Contact component rendered");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<string | null>(null);
 
@@ -15,10 +15,10 @@ console.log("Contact component rendered");
     e.preventDefault();
     setStatus("sending");
 // --- Add this block for debugging ---
-  console.log("Sending with keys:");
-  console.log("Service ID:", import.meta.env.VITE_EMAILJS_SERVICE_ID);
-  console.log("Template ID:", import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
-  console.log("Public Key:", import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  // console.log("Sending with keys:");
+  // console.log("Service ID:", import.meta.env.VITE_EMAILJS_SERVICE_ID);
+  // console.log("Template ID:", import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
+  // console.log("Public Key:", import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
   // ------------------------------------
     try {
       await emailjs.send(

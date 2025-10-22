@@ -13,3 +13,8 @@ body {
 h1, h2, h3, h4 {
   @apply font-semibold text-gray-800;
 }
+
+#myNav:hover{
+  scale: 1.2;
+  color:aquamarine;
+}
