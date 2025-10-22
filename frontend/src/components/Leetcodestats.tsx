@@ -18,8 +18,8 @@ interface LeetCodeData {
     };
   };
   userContestRanking: {
-    rating: number | null;
-  } | null;
+    rating: number ;
+  }
 }
 
 // This is the shape of the data *your* API /api/leetcode sends back
@@ -81,7 +81,7 @@ const LeetCodeStatsComponent = () => {
         // 4. Set the final, processed state
         setStats({
           solved,
-          rating: ranking?.rating || 0,
+          rating:Math.round(ranking.rating),
         });
 
       } catch (err) {

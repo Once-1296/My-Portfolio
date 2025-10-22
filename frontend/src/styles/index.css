@@ -10,11 +10,34 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, h4 {
-  @apply font-semibold text-gray-800;
-}
 
+
+/* NavBar*/
 #myNav:hover{
   scale: 1.2;
   color:aquamarine;
+}
+#PortfolioHead:hover{
+  text-shadow: 0 0 10px #f00, 0 0 20px #f00, 0 0 30px #f00; 
+  scale: 1.2;
+}
+/* Home Page */
+
+#hometext{
+  animation: fadeUp;
+  animation-duration: 3s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#hometext:hover{
+  text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f; /* Blue glow effect */
+}
+@keyframes fadeUp {
+  from{transform: translateY(300%);}
+  0%{opacity: 0;}
+  20%{opacity: 0.2;}
+  40%{opacity: 0.4;}
+  60%{opacity: 0.6;}
+  80%{opacity: 0.8;}
+  100%{opacity: 1;}
 }
