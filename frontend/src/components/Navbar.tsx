@@ -68,13 +68,13 @@ const Navbar: React.FC = () => {
       {/* Mobile Dropdown */}
       {menuOpen && (
         <ul className="flex flex-col mt-4 space-y-3 md:hidden bg-gray-800 rounded-lg p-4">
-          <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
-          <li><Link to="/skills" onClick={() => setMenuOpen(false)}>Skills</Link></li>
-          <li><Link to="/achievements" onClick={() => setMenuOpen(false)}>Achievements</Link></li>
-          <li><Link to="/projects" onClick={() => setMenuOpen(false)}>Projects</Link></li>
-          <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
-          <li>
+          <li id="myNav"><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
+          <li id="myNav"><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
+          <li id="myNav"><Link to="/skills" onClick={() => setMenuOpen(false)}>Skills</Link></li>
+          <li id="myNav"><Link to="/achievements" onClick={() => setMenuOpen(false)}>Achievements</Link></li>
+          <li id="myNav"><Link to="/projects" onClick={() => setMenuOpen(false)}>Projects</Link></li>
+          <li id="myNav"><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+          <li id="myNav">
             <a
               href="/assets/resume.pdf"
               download="Awwab_Wadekar_Resume.pdf"
