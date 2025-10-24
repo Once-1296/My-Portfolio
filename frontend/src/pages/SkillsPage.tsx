@@ -106,12 +106,12 @@ const Skills: React.FC = () => {
           ) : (
             <>
               <div className="mb-6">
-                <h4 className="font-bold text-gray-700 mb-2">LeetCode</h4>
+                <h4 className="font-bold text-gray-700 mb-2"><a href="https://leetcode.com/u/Awwabcoder23/" target="_blank">LeetCode</a></h4>
                     <LeetCodeStatsComponent />      
               </div>
 
               <div>
-                <h4 className="font-bold text-gray-700 mb-2">Codeforces</h4>
+                <h4 className="font-bold text-gray-700 mb-2"><a href="https://codeforces.com/profile/Awwab_coder123" target="_blank">Codeforces</a></h4>
                 {cfStats ? (
                   <p className="text-sm sm:text-base text-gray-600">
                     Rating: {cfStats.rating} | Max: {cfStats.maxRating} | Rank:{" "}
