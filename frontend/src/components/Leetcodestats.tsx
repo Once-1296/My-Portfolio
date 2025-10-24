@@ -116,6 +116,7 @@ const LeetCodeStatsComponent = () => {
     <div>
       <h3>LeetCode Stats</h3>
       <p>Rating: {stats.rating}</p>
+      <p>Questions Solved:</p>
       <ul>
         <li>Easy: {stats.solved.Easy || 0}</li>
         <li>Medium: {stats.solved.Medium || 0}</li>
