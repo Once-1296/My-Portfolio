@@ -1,17 +1,14 @@
-// File: src/components/LeetCodeStats.tsx
+// In your React component file (e.g., LeetCodeStats.tsx)
 
-import { useState, useEffect } from "react";
-import axios, { isAxiosError } from "axios";
+import { useState, useEffect } from 'react';
+import axios, { isAxiosError } from 'axios';
 
-// --- Type Definitions ---
+// --- Re-use or import the types ---
+// (Ideally, share these from a common /src/types.ts file)
+
 interface AcSubmissionNum {
-  difficulty: "All" | "Easy" | "Medium" | "Hard";
+  difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
   count: number;
-}
-
-interface ContestRanking {
-  globalRanking: number | null;
-  totalParticipants: number | null;
 }
 
 interface LeetCodeData {
@@ -21,33 +18,39 @@ interface LeetCodeData {
     };
   };
   userContestRanking: {
-    rating: number | null;
-    contestRanking: ContestRanking;
-  } | null;
+    rating: number ;
+    contestRanking : {
+          globalRanking:number;
+          totalParticipants:number;
+        }
+  }
 }
 
+// This is the shape of the data *your* API /api/leetcode sends back
 interface ApiResponse {
   data: LeetCodeData;
 }
 
+// --- This is the shape of the state you want to store ---
 interface SolvedStats {
   All: number;
   Easy: number;
   Medium: number;
   Hard: number;
-  [key: string]: number;
+  [key: string]: number; // Index signature for safety
 }
 
 interface ProcessedStats {
   solved: SolvedStats;
-  rating: number | null;
-  percentile: number | null;
+  rating: number;
 }
 
-// --- Component ---
+// --- Your Component ---
+
 const LeetCodeStatsComponent = () => {
+  // State for your processed data
   const [stats, setStats] = useState<ProcessedStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,49 +58,42 @@ const LeetCodeStatsComponent = () => {
       setLoading(true);
       setError(null);
       try {
-        // ✅ Call your own Vercel API route
-        const res = await axios.post<ApiResponse>("/api/leetcode", {
-          username: "Awwabcoder23",
-        });
+        // 1. Call your *own* proxy endpoint
+        const res = await axios.post<ApiResponse>(
+          '/api/leetcode',
+          {
+            // You can send the username to your API
+            username: 'Awwabcoder23',
+          }
+        );
 
+        // 2. Get the data from the response
         const apiData = res.data.data;
         const ranking = apiData.userContestRanking;
 
-        // Compute solved problems
-        const solved = apiData.matchedUser.submitStatsGlobal.acSubmissionNum.reduce(
-          (acc, item) => {
-            acc[item.difficulty] = item.count;
-            return acc;
-          },
-          {} as SolvedStats
-        );
+        // 3. Process the data with proper typing (no 'any'!)
+        const solved =
+          apiData.matchedUser.submitStatsGlobal.acSubmissionNum.reduce(
+            (acc, item) => {
+              // Now item.difficulty is correctly typed
+              acc[item.difficulty] = item.count;
+              return acc;
+            },
+            {} as SolvedStats // Type the initial value
+          );
 
-        // ✅ Compute percentile (if data exists)
-        let percentile: number | null = null;
-        if (
-          ranking?.contestRanking?.globalRanking != null &&
-          ranking?.contestRanking?.totalParticipants != null &&
-          ranking.contestRanking.totalParticipants > 0
-        ) {
-          percentile =
-            ((ranking.contestRanking.totalParticipants -
-              ranking.contestRanking.globalRanking) /
-              ranking.contestRanking.totalParticipants) *
-            100;
-          percentile = parseFloat(percentile.toFixed(3));
-        }
-
+        // 4. Set the final, processed state
         setStats({
           solved,
-          rating: ranking?.rating || null,
-          percentile,
+          rating:Math.round(ranking.rating),
         });
+
       } catch (err) {
-        console.error("❌ Error fetching LeetCode stats:", err);
+        console.error('❌ Error fetching LeetCode stats:', err);
         if (isAxiosError(err)) {
-          setError(err.response?.data?.message || "Failed to fetch data");
+          setError(err.response?.data?.message || 'Failed to fetch data');
         } else {
-          setError("An unknown error occurred");
+          setError('An unknown error occurred');
         }
       } finally {
         setLoading(false);
@@ -105,33 +101,31 @@ const LeetCodeStatsComponent = () => {
     };
 
     fetchLeetCodeStats();
-  }, []);
+  }, []); // Runs once on component mount
 
-  if (loading) return <div>Loading LeetCode Stats...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!stats) return null;
+  // --- Render your component ---
+  if (loading) {
+    return <div>Loading LeetCode Stats...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!stats) {
+    return null;
+  }
 
   return (
-    <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto">
-      <h3 className="text-2xl font-bold mb-4 text-yellow-400 text-center">
-        🧠 LeetCode Stats
-      </h3>
-      <ul className="space-y-2 text-lg">
-        <li>
-          <strong>Rating:</strong>{" "}
-          {stats.rating !== null ? stats.rating : "N/A"}
-        </li>
-        <li>
-          <strong>Percentile:</strong>{" "}
-          {stats.percentile !== null ? `${stats.percentile}%` : "N/A"}
-        </li>
-        <li>
-          <strong>Total Solved:</strong> {stats.solved.All || 0}
-        </li>
-        <li>
-          Easy: {stats.solved.Easy || 0} | Medium: {stats.solved.Medium || 0} |
-          Hard: {stats.solved.Hard || 0}
-        </li>
+    <div>
+      <h3>LeetCode Stats</h3>
+      <p>Rating: {stats.rating}</p>
+      <p>Questions Solved:</p>
+      <ul>
+        <li>Easy: {stats.solved.Easy || 0}</li>
+        <li>Medium: {stats.solved.Medium || 0}</li>
+        <li>Hard: {stats.solved.Hard || 0}</li>
+        <li>Total: {stats.solved.All || 0}</li>
       </ul>
     </div>
   );
