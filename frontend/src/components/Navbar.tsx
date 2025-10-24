@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
           <li><Link to="/achievements" onClick={() => setMenuOpen(false)}>Achievements</Link></li>
           <li><Link to="/projects" onClick={() => setMenuOpen(false)}>Projects</Link></li>
           <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
-          <li id="myNav">
+          <li>
             <a
               href="/assets/resume.pdf"
               download="Awwab_Wadekar_Resume.pdf"
