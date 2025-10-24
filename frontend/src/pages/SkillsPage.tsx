@@ -2,16 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LeetCodeStatsComponent from "../components/Leetcodestats";
 
-interface LCStats {
-  solved: {
-    All: number;
-    Easy: number;
-    Medium: number;
-    Hard: number;
-  };
-  rating: number;
-}
-
 interface CFStats {
   rating: number;
   maxRating?: number;
@@ -20,51 +10,10 @@ interface CFStats {
 }
 
 const Skills: React.FC = () => {
-  const [lcStats, setLcStats] = useState<LCStats | null>(null);
   const [cfStats, setCfStats] = useState<CFStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchLeetCodeStats = async () => {
-      const query = `
-        query getUserProfile($username: String!) {
-          matchedUser(username: $username) {
-            username
-            submitStatsGlobal {
-              acSubmissionNum {
-                difficulty
-                count
-              }
-            }
-          }
-          userContestRanking {
-            rating
-          }
-        }
-      `;
-      try {
-        const res = await axios.post("https://leetcode.com/graphql", {
-          query,
-          variables: { username: "Awwabcoder23" },
-        });
-        const data = res.data.data.matchedUser;
-        const solved = data.submitStatsGlobal.acSubmissionNum.reduce(
-          (acc: any, item: any) => {
-            acc[item.difficulty] = item.count;
-            return acc;
-          },
-          {}
-        );
-        return {
-          solved,
-          rating: res.data.data.userContestRanking?.rating || 0,
-        };
-      } catch (err) {
-        console.error("❌ Error fetching LeetCode stats:", err);
-        return null;
-      }
-    };
-
     const fetchCodeforcesStats = async () => {
       try {
         const res = await fetch(
@@ -86,11 +35,9 @@ const Skills: React.FC = () => {
 
     const fetchStats = async () => {
       setLoading(true);
-      const [lc, cf] = await Promise.all([
-        fetchLeetCodeStats(),
+      const [cf] = await Promise.all([
         fetchCodeforcesStats(),
       ]);
-      setLcStats(lc);
       setCfStats(cf);
       setLoading(false);
     };
@@ -160,18 +107,7 @@ const Skills: React.FC = () => {
             <>
               <div className="mb-6">
                 <h4 className="font-bold text-gray-700 mb-2">LeetCode</h4>
-                {lcStats ? (
-                  <div>
-                    <LeetCodeStatsComponent />
-                    <p className="text-sm sm:text-base text-gray-600 mt-2">
-                      Rating: {lcStats.rating}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-red-500 text-sm">
-                    Failed to load LeetCode stats
-                  </p>
-                )}
+                    <LeetCodeStatsComponent />      
               </div>
 
               <div>
