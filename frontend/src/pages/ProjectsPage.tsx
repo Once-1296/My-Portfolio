@@ -3,13 +3,13 @@ import React from "react";
 const Projects: React.FC = () => {
   return (
     <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-center">
-        Projects
+      <h2 id="proj_head" className="text-2xl sm:text-3xl font-semibold mb-8 text-center">
+        Projects 🕹️
       </h2>
 
       <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-8">
         {/* Train Your Foes */}
-        <div className="p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition bg-white">
+        <div id = "proj_1" className="p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition bg-gray-200">
           <h3 className="text-lg sm:text-xl font-bold mb-2">
             TRAIN YOUR FOES
           </h3>
@@ -89,7 +89,7 @@ const Projects: React.FC = () => {
         </div>
 
         {/* Endless Car Highway */}
-        <div className="p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition bg-white">
+        <div id = "proj_2"className="bg-gray-200 p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition">
           <h3 className="text-lg sm:text-xl font-bold mb-2">
             ENDLESS CAR HIGHWAY
           </h3>
@@ -109,6 +109,7 @@ const Projects: React.FC = () => {
 
           <div className="space-y-2 text-sm sm:text-base">
             <a
+            
               target="_blank"
               href="https://github.com/Once-1296/car-game"
               className="underline text-blue-600"
@@ -130,17 +131,10 @@ const Projects: React.FC = () => {
             SFML and C++. Fun and easy to play, featuring difficulty settings,
             high scores, and smooth controls.
           </p>
-
-          <ul className="list-disc list-inside mt-3 text-sm sm:text-base text-gray-700 space-y-1">
-            <li>Built with C++ and SFML</li>
-            <li>Retro-styled Windows game with easy controls</li>
-            <li>Includes difficulty levels, menus, and high scores</li>
-            <li>Simple arrow key movement</li>
-          </ul>
         </div>
       </div>
 
-      <div className="text-center mt-10">
+      <div id ="link_b" className="text-center mt-10">
         <a
           target="_blank"
           href="https://github.com/Once-1296?tab=repositories"

@@ -100,42 +100,58 @@ const Skills: React.FC = () => {
 
   return (
     <main className="container mx-auto px-4 sm:px-6 md:px-10 py-10 sm:py-12">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center">
-        Skills
+      <h2 id ="skill_head"className="text-2xl sm:text-3xl font-bold mb-8 text-center">
+        Skills💪🏻
       </h2>
 
       {/* Technical Skills */}
       <section className="mb-10">
+        <div id ="skill_1" className="skill">
+         <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md">
         <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
           Technical Skills
         </h3>
         <ul className="list-disc list-inside space-y-2 text-gray-700 text-sm sm:text-base">
-          <li>HTML, CSS, JavaScript</li>
-          <li>Python: numpy, flask, opencv</li>
-          <li>C, C++, SFML</li>
-          <li>C#, Unity</li>
+          <li>Basic Web Development : HTML, CSS, JavaScript</li>
+          <li>Programming Languages: Python, C, C++, C#</li>
+          <li>Data Analysis Libraries : numpy, pandas, matplotlib</li>
+          <li>Backend : Flask</li>
+          <li>Database : MySQL</li>
+          <li>Development tools : Git, Github, Jupyter, Visual Studio, VS Code</li>
+          <li>Graphics Library : opencv, SFML</li>
+          <li>Game Engine : Unity</li>
         </ul>
+      </div>
+      </div>
       </section>
 
       {/* Professional Knowledge */}
       <section className="mb-10">
+         <div id ="skill_2" className="skill">
+       <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md">
         <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
           Professional Knowledge
         </h3>
         <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm sm:text-base">
           <li>Project Management</li>
           <li>Team Collaboration</li>
-          <li>Communication & Leadership</li>
+          <li>Effective Communication & Leadership</li>
+          <li>Disciplined Nature</li>
+          <li>Deadline Handling</li>
+          <li>Damage Control</li>
         </ul>
+      </div>
+        </div>
       </section>
 
       {/* Coding Profiles */}
       <section className="border-t border-gray-300 pt-6 mt-8">
-        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
+         <div id ="skill_3" className="skill">
+        <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md">
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
           Coding Profiles
         </h3>
 
-        <div className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md">
           {loading ? (
             <p className="text-gray-500 text-sm sm:text-base">
               Loading stats...
@@ -173,6 +189,7 @@ const Skills: React.FC = () => {
               </div>
             </>
           )}
+          </div>
         </div>
       </section>
     </main>

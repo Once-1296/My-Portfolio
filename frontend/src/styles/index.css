@@ -4,12 +4,15 @@
 
 /* Optional: Global tweaks */
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-white text-gray-900 transition-colors duration-300;
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
 }
-
+/* Dark mode */
+.dark body {
+  @apply bg-gray-900 text-gray-600;
+}
 
 
 /* NavBar*/
@@ -30,20 +33,18 @@ body {
   animation-iteration-count: 1;
 }
 #hometext:hover{
-  text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f; /* Blue glow effect */
+  scale:1.15;
+  font-style: italic;
 }
 
 /* About Page */
-/* #about{
-  background-color: rgba(61, 214, 76, 0.863);
-} */
 .about{
+  background-color: whitesmoke;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 4px 0px solid rgb(69, 66, 66);
   border-radius: 8px;
-  background-color: rgba(179, 181, 201, 0.826);
-
+  background-color: rgb(229,231,235);
 }
 .about:hover{
   transform: translateY(-3%);
@@ -59,7 +60,6 @@ body {
 #about_head:hover{
   scale: 1.5;
   /* font-style: italic; */
-text-shadow: 0 0 6px rgb(91, 91, 108), 0 0 12px rgb(91, 91, 108), 0 0 19px rgb(91, 91, 108); /* Blue glow effect */
 }
 #about_bg{
 animation: fadeUp;
@@ -78,6 +78,151 @@ animation: fadeUp;
   animation-duration: 3.2s;
   animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
   animation-iteration-count: 1;
+}
+/* Skills page */
+.skill{
+  background-color: whitesmoke;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 4px 0px solid rgb(69, 66, 66);
+  border-radius: 8px;
+  background-color: rgba(67, 67, 88, 0.826);
+}
+.skill:hover{
+  transform: translateY(-3%);
+  font-style: italic;
+}
+#skill_head{
+  animation: fadeUp;
+  animation-duration: 1.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+  scale:1.2
+}
+#skill_head:hover{
+  scale: 1.5;
+  /* font-style: italic; */
+}
+#skill_1{
+animation: fadeUp;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#skill_2{
+    animation: fadeUp;
+  animation-duration: 2.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#skill_3{
+    animation: fadeUp;
+  animation-duration: 3.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+/* achievements page */
+#ach_head{
+  animation: fadeUp;
+  animation-duration: 1.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+  scale:1.2
+}
+#ach_head:hover{
+  scale: 1.5;
+  /* font-style: italic; */
+}
+#ach_1{
+animation: fadeUp;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#ach_1:hover{
+      transform: translateY(-3%);
+  font-style: italic;
+}
+#ach_2{
+
+    animation: fadeUp;
+  animation-duration: 2.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#ach_2:hover{
+      transform: translateY(-3%);
+  font-style: italic;
+}
+/* projects page */
+#proj_head{
+  animation: fadeUp;
+  animation-duration: 1.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+  scale:1.2
+}
+#proj_head:hover{
+  scale: 1.5;
+  /* font-style: italic; */
+}
+#proj_1{
+animation: fadeUp;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#proj_1:hover{
+      transform: translateY(-3%);
+  font-style: italic;
+}
+#proj_2{
+
+    animation: fadeUp;
+  animation-duration: 2.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#proj_2:hover{
+      transform: translateY(-3%);
+  font-style: italic;
+}
+#link_b:hover{
+  scale : 1.1;
+  font-style: italic;
+}
+/* contact page */
+#con_head{
+  animation: fadeUp;
+  animation-duration: 1.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+  scale:1.2
+}
+#con_head:hover{
+  scale: 1.5;
+  /* font-style: italic; */
+}
+#con_1{
+animation: fadeUp;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#con_1:hover{
+      transform: translateY(-3%);
+  font-style: italic;
+}
+#con_2{
+
+    animation: fadeUp;
+  animation-duration: 2.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#con_2:hover{
+      transform: translateY(-3%);
+  font-style: italic;
 }
 @keyframes fadeUp {
   from{transform: translateY(300%);}

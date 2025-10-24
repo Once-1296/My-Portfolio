@@ -33,13 +33,13 @@ const Contact: React.FC = () => {
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-center">
-        Contact Me
+      <h2 id = "con_head" className="text-2xl sm:text-3xl font-semibold mb-8 text-center">
+        Contact Me💬
       </h2>
 
       <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-8">
         {/* Contact Info */}
-        <div>
+        <div id = "con_1" className="bg-gray-200 p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition">
           <h3 className="text-lg sm:text-xl font-bold mb-4">Get in Touch</h3>
           <ul className="space-y-2 text-sm sm:text-base">
             <li>
@@ -77,7 +77,7 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Contact Form */}
-        <div>
+        <div id = "con_2" className="bg-gray-200 p-4 sm:p-6 border rounded-xl shadow hover:shadow-lg transition">
           <h3 className="text-lg sm:text-xl font-bold mb-4">Send a Message</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input

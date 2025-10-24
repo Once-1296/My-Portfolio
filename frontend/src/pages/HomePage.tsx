@@ -3,7 +3,7 @@ import React from "react";
 const Home: React.FC = () => {
   return (
     <section
-      className="min-h-screen flex flex-col justify-center items-center text-center bg-gradient-to-b from-gray-800 to-black text-white px-4 sm:px-6 md:px-10"
+      className="min-h-screen flex flex-col justify-center items-center text-center  text-white px-4 sm:px-6 md:px-10"
     >
       <h1
         id="hometext"

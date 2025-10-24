@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+   const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
   return (
     <nav className="bg-gray-900 text-white shadow-md px-6 py-4">
       {/* Top Row */}
@@ -42,6 +54,14 @@ const Navbar: React.FC = () => {
               📄 Download Resume
             </a>
           </li>
+          <li>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="ml-4 px-3 py-2 rounded-lg border border-gray-500 hover:bg-gray-700 dark:hover:bg-gray-300 transition duration-200"
+          >
+            {darkMode ? "🌞" : "🌙"}
+          </button>
+        </li>
         </ul>
       </div>
 
