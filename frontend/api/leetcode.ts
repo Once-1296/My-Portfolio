@@ -21,6 +21,10 @@ interface LeetCodeData {
   };
   userContestRanking: {
     rating: number | null; // Rating can be null
+    contestRanking: {
+          globalRanking : number | null;
+          totalParticipants :number | null;
+        }
   } | null; // The whole ranking object can be null
 }
 
@@ -56,6 +60,10 @@ export default async function handler(
       }
       userContestRanking(username: $username) {
         rating
+       contestRanking {
+          globalRanking
+          totalParticipants
+        }
       }
     }
   `;
