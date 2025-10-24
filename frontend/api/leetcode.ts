@@ -1,52 +1,47 @@
 // File: /api/leetcode.ts
-
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import axios, { isAxiosError } from 'axios';
-
-// --- Define Types for the LeetCode Response ---
-// This helps us type-check the data we get back from LeetCode
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import axios, { isAxiosError } from "axios";
 
 interface AcSubmissionNum {
-  difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
+  difficulty: "All" | "Easy" | "Medium" | "Hard";
   count: number;
 }
 
-// This matches the shape of the successful data object
-interface LeetCodeData {
-  matchedUser: {
-    username: string;
-    submitStatsGlobal: {
-      acSubmissionNum: AcSubmissionNum[];
-    };
+interface MatchedUser {
+  username: string;
+  submitStatsGlobal: {
+    acSubmissionNum: AcSubmissionNum[];
   };
-  userContestRanking: {
-    rating: number | null; // Rating can be null
-    contestRanking: {
-          globalRanking : number | null;
-          totalParticipants :number | null;
-        }
-  } | null; // The whole ranking object can be null
 }
 
-// This is the full response from the GraphQL endpoint
-interface LeetCodeGraphQLResponse {
-  data: LeetCodeData;
-  errors?: Array<{ message: string }>; // Optional errors array
+interface ContestRanking {
+  globalRanking: number | null;
+  totalParticipants: number | null;
 }
 
-// --- The Serverless Function ---
+interface UserContestRanking {
+  rating: number | null;
+  contestRanking: ContestRanking | null;
+}
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-) {
-  // 1. Only allow POST requests
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ message: 'Method Not Allowed' });
+interface GraphQLResponseData {
+  matchedUser?: MatchedUser | null;
+  userContestRanking?: UserContestRanking | null;
+}
+
+interface GraphQLResponse {
+  data?: GraphQLResponseData;
+  errors?: Array<{ message: string }>;
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "Method Not Allowed. Use POST." });
   }
 
-  // 2. Define the GraphQL query
+  const username = (req.body && req.body.username) || "Awwabcoder23";
+
   const query = `
     query getUserProfile($username: String!) {
       matchedUser(username: $username) {
@@ -60,7 +55,7 @@ export default async function handler(
       }
       userContestRanking(username: $username) {
         rating
-       contestRanking {
+        contestRanking {
           globalRanking
           totalParticipants
         }
@@ -68,49 +63,80 @@ export default async function handler(
     }
   `;
 
-  // 3. Get the username from your frontend's request body (more flexible)
-  // Or keep it hard-coded if you prefer.
-  const username = req.body.username || 'Awwabcoder23';
-
-  // 4. Make the proxy request to LeetCode
   try {
-    const { data } = await axios.post<LeetCodeGraphQLResponse>(
-      'https://leetcode.com/graphql',
-      {
-        query,
-        variables: { username },
-      },
+    const response = await axios.post<GraphQLResponse>(
+      "https://leetcode.com/graphql",
+      { query, variables: { username } },
       {
         headers: {
-          'Content-Type': 'application/json',
-          'Referer': 'https://leetcode.com/', // Add referer just in case
+          "Content-Type": "application/json",
+          // polite browser-like headers to reduce chances of being blocked
+          Referer: "https://leetcode.com/",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36",
+          Accept: "application/json, text/plain, */*",
         },
+        timeout: 10_000,
       }
     );
 
-    // 5. Check for GraphQL errors (e.g., user not found)
-    if (data.errors) {
-      console.error('GraphQL Errors:', data.errors);
-      return res
-        .status(400)
-        .json({ message: 'GraphQL error', details: data.errors });
+    const data = response.data;
+
+    if (!data) {
+      return res.status(502).json({ error: "Empty response from LeetCode" });
     }
 
-    // 6. Success: Send the data back to your frontend
-    res.status(200).json(data);
-    
-  } catch (err) {
-    // 7. Handle network/axios errors
-    console.error('Error in LeetCode proxy:', err);
-    if (isAxiosError(err)) {
-      res.status(err.response?.status || 500).json({
-        message: 'Error fetching from LeetCode',
-        details: err.response?.data,
-      });
-    } else {
-      res
-        .status(500)
-        .json({ message: 'An unknown server error occurred' });
+    if (data.errors && data.errors.length > 0) {
+      return res.status(400).json({ error: "GraphQL error", details: data.errors });
     }
+
+    const d = data.data;
+    if (!d || !d.matchedUser) {
+      return res.status(404).json({ error: "User not found or no matchedUser returned" });
+    }
+
+    // extract solved stats into object with normalized keys
+    const acList = d.matchedUser.submitStatsGlobal?.acSubmissionNum || [];
+    const solved = acList.reduce<Record<string, number>>((acc, item) => {
+      const key = item.difficulty || "All";
+      acc[key] = item.count ?? 0;
+      return acc;
+    }, { All: 0, Easy: 0, Medium: 0, Hard: 0 });
+
+    const ranking = d.userContestRanking || null;
+    const rating = ranking?.rating ?? null;
+    const contestRanking = ranking?.contestRanking ?? null;
+
+    // Return a clean, small payload
+    const payload = {
+      username: d.matchedUser.username,
+      solved: {
+        all: solved.All ?? 0,
+        easy: solved.Easy ?? 0,
+        medium: solved.Medium ?? 0,
+        hard: solved.Hard ?? 0,
+      },
+      rating: rating === null ? null : Math.round(rating),
+      contestRanking: {
+        globalRanking: contestRanking?.globalRanking ?? null,
+        totalParticipants: contestRanking?.totalParticipants ?? null,
+      },
+    };
+
+    // Cache for 1 hour on Vercel edge (adjust as needed)
+    res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=60");
+    return res.status(200).json(payload);
+  } catch (err) {
+    console.error("LeetCode proxy error:", err);
+
+    if (isAxiosError(err)) {
+      const status = err.response?.status || 502;
+      return res.status(status).json({
+        error: "Failed to fetch from LeetCode",
+        details: err.response?.data ?? err.message,
+      });
+    }
+
+    return res.status(500).json({ error: "Internal server error", details: String(err) });
   }
 }
