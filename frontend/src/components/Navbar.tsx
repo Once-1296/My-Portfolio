@@ -83,6 +83,14 @@ const Navbar: React.FC = () => {
               📄 Download Resume
             </a>
           </li>
+          <li>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="ml-4 px-3 py-2 rounded-lg border border-gray-500 hover:bg-gray-700 dark:hover:bg-gray-300 transition duration-200"
+          >
+            {darkMode ? "🌞" : "🌙"}
+          </button>
+        </li>
         </ul>
       )}
     </nav>
