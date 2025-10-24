@@ -60,10 +60,6 @@ export default async function handler(
       }
       userContestRanking(username: $username) {
         rating
-       contestRanking {
-          globalRanking
-          totalParticipants
-        }
       }
     }
   `;
