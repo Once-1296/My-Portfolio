@@ -1,17 +1,13 @@
 // File: /api/leetcode.ts
-
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import axios, { isAxiosError } from 'axios';
 
-// --- Define Types for the LeetCode Response ---
-// This helps us type-check the data we get back from LeetCode
-
+// --- Types ---
 interface AcSubmissionNum {
   difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
   count: number;
 }
 
-// This matches the shape of the successful data object
 interface LeetCodeData {
   matchedUser: {
     username: string;
@@ -20,43 +16,39 @@ interface LeetCodeData {
     };
   };
   userContestRanking: {
-    rating: number | null; // Rating can be null
-    globalRanking: number,
-    totalParticipants: number,
-    topPercentage: number,
-    badge:{
-    name:string,
-    },
-  } | null; // The whole ranking object can be null
+    rating: number | null;
+    globalRanking: number;
+    totalParticipants: number;
+    topPercentage: number;
+    badge: {
+      name: string;
+    };
+  } | null;
 }
 
-// This is the full response from the GraphQL endpoint
 interface LeetCodeGraphQLResponse {
   data: LeetCodeData;
-  errors?: Array<{ message: string }>; // Optional errors array
+  errors?: Array<{ message: string }>;
 }
-// --- simple in-memory cache ---
-let cachedData: { timestamp: number; data: LeetCodeGraphQLResponse } | null = null;
-const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours in ms
 
-// --- The Serverless Function ---
+// --- In-memory cache ---
+let cachedData: { timestamp: number; data: LeetCodeData } | null = null;
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-) {
-  // 1. Only allow POST requests
+// --- Handler ---
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
-  // 🔹 1. Return cached data if still valid
+
+  // ✅ Return cached data if still valid
   if (cachedData && Date.now() - cachedData.timestamp < CACHE_TTL) {
- console.log("✅ Using cached LeetCode data");
-    return res.status(200).json({ ...cachedData.data, cached: true });
+    console.log('✅ Using cached LeetCode data');
+    return res.status(200).json({ data: cachedData.data, cached: true });
   }
-  console.log("Fetching from Leetcode api...");
-  // 2. Define the GraphQL query
+
+  console.log('🌐 Fetching fresh LeetCode data...');
   const query = `
     query getUserProfile($username: String!) {
       matchedUser(username: $username) {
@@ -73,18 +65,15 @@ export default async function handler(
         globalRanking
         totalParticipants
         topPercentage
-        badge{
-        name
+        badge {
+          name
         }
       }
     }
   `;
 
-  // 3. Get the username from your frontend's request body (more flexible)
-  // Or keep it hard-coded if you prefer.
   const username = req.body.username || 'Awwabcoder23';
 
-  // 4. Make the proxy request to LeetCode
   try {
     const { data } = await axios.post<LeetCodeGraphQLResponse>(
       'https://leetcode.com/graphql',
@@ -95,36 +84,31 @@ export default async function handler(
       {
         headers: {
           'Content-Type': 'application/json',
-          'Referer': 'https://leetcode.com/', // Add referer just in case
+          Referer: 'https://leetcode.com/',
         },
       }
     );
 
-    // 5. Check for GraphQL errors (e.g., user not found)
+    // Handle GraphQL errors
     if (data.errors) {
       console.error('GraphQL Errors:', data.errors);
-      return res
-        .status(400)
-        .json({ message: 'GraphQL error', details: data.errors });
+      return res.status(400).json({ message: 'GraphQL error', details: data.errors });
     }
 
-    // 🔹 2. Store in cache
-    cachedData = { timestamp: Date.now(), data: data };
-    // 6. Success: Send the data back to your frontend
-    res.status(200).json(data);
-    
+    // ✅ Store the cleaned data (not the wrapper) in cache
+    cachedData = { timestamp: Date.now(), data: data.data };
+
+    // ✅ Return the correct shape expected by frontend
+    return res.status(200).json({ data: data.data, cached: false });
+
   } catch (err) {
-    // 7. Handle network/axios errors
-    console.error('Error in LeetCode proxy:', err);
+    console.error('❌ Error fetching LeetCode data:', err);
     if (isAxiosError(err)) {
-      res.status(err.response?.status || 500).json({
+      return res.status(err.response?.status || 500).json({
         message: 'Error fetching from LeetCode',
         details: err.response?.data,
       });
-    } else {
-      res
-        .status(500)
-        .json({ message: 'An unknown server error occurred' });
     }
+    return res.status(500).json({ message: 'An unknown server error occurred' });
   }
 }

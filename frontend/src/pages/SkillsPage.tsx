@@ -34,12 +34,14 @@ const CACHE_KEY = "cfStatsCache";
         );
         const data = await res.json();
         const user = data.result[0];
-        return {
-          rating: user.rating,
-          maxRating: user.maxRating,
-          rank: user.rank,
-          maxRank:user.maxRank,
-        };
+      const cf = {
+      rating: user.rating,
+      maxRating: user.maxRating,
+      rank: user.rank,
+      maxRank: user.maxRank,
+    };
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cf }));
+    return cf;
       } catch (err) {
         console.error("❌ Error fetching Codeforces stats:", err);
         return null;
