@@ -17,6 +17,12 @@ export async function fetchLeetCodeStats(username: string) {
         }
     userContestRanking(username: $username) {
         rating
+        globalRanking
+        totalParticipants
+        topPercentage
+        badge{
+        name
+        }
         }
       }
     `;
@@ -37,7 +43,7 @@ export async function fetchLeetCodeStats(username: string) {
       },
       {}
     );
-
+    const rank = response.data.data.userContestRanking;
     return {
       username: user.username,
       rating: Math.round(response.data.data.userContestRanking.rating),
@@ -47,6 +53,10 @@ export async function fetchLeetCodeStats(username: string) {
         medium: solved.medium || 0,
         hard: solved.hard || 0,
       },
+      rank: rank.globalRanking,
+      size: rank.totalParticipants,
+      top_perc: rank.topPercentage,
+      badge: rank.badge,
     };
   } catch (err) {
     console.error("❌ Error fetching LeetCode:", err);

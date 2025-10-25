@@ -19,10 +19,12 @@ interface LeetCodeData {
   };
   userContestRanking: {
     rating: number ;
-    contestRanking : {
-          globalRanking:number;
-          totalParticipants:number;
-        }
+    globalRanking: number,
+    totalParticipants: number,
+    topPercentage: number,
+    badge:{
+    name:string,
+    },
   }
 }
 
@@ -43,6 +45,12 @@ interface SolvedStats {
 interface ProcessedStats {
   solved: SolvedStats;
   rating: number;
+  globalRanking: number,
+    totalParticipants: number,
+    topPercentage: number,
+    badge:{
+    name:string,
+    },
 }
 
 // --- Your Component ---
@@ -86,6 +94,10 @@ const LeetCodeStatsComponent = () => {
         setStats({
           solved,
           rating:Math.round(ranking.rating),
+    globalRanking: ranking.globalRanking,
+    totalParticipants: ranking.totalParticipants,
+    topPercentage: ranking.topPercentage,
+    badge:ranking.badge?ranking.badge:{"name":"Knight"},
         });
 
       } catch (err) {
@@ -120,6 +132,8 @@ const LeetCodeStatsComponent = () => {
     <div>
       <h3>LeetCode Stats</h3>
       <p>Rating: {stats.rating}</p>
+      <p>Among the top {stats.topPercentage} in contest ranks. ({stats.globalRanking} / {stats.totalParticipants})</p>
+      <p>Having attained {stats.badge.name} badge</p>
       <p>Questions Solved:</p>
       <ul>
         <li>Easy: {stats.solved.Easy || 0}</li>
