@@ -27,6 +27,7 @@ const CACHE_KEY = "cfStatsCache";
       return data;
     }
   }
+  console.log("Fetching from Codeforces api...");
       try {
         const res = await fetch(
           "https://codeforces.com/api/user.info?handles=Awwab_coder123"

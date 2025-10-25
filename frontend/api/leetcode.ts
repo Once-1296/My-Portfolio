@@ -52,8 +52,10 @@ export default async function handler(
   }
   // 🔹 1. Return cached data if still valid
   if (cachedData && Date.now() - cachedData.timestamp < CACHE_TTL) {
+ console.log("✅ Using cached LeetCode data");
     return res.status(200).json({ ...cachedData.data, cached: true });
   }
+  console.log("Fetching from Leetcode api...");
   // 2. Define the GraphQL query
   const query = `
     query getUserProfile($username: String!) {
