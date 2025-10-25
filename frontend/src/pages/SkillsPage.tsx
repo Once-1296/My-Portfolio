@@ -108,7 +108,7 @@ const CACHE_KEY = "cfStatsCache";
          <div id ="skill_3" className="skill">
         <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md">
           <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
-          Coding Profiles
+          Competitive Programming Profiles
         </h3>
 
           {loading ? (

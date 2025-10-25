@@ -36,7 +36,7 @@ interface LeetCodeGraphQLResponse {
   errors?: Array<{ message: string }>; // Optional errors array
 }
 // --- simple in-memory cache ---
-let cachedData: { timestamp: number; data: LeetCodeData } | null = null;
+let cachedData: { timestamp: number; data: LeetCodeGraphQLResponse } | null = null;
 const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours in ms
 
 // --- The Serverless Function ---
@@ -107,7 +107,7 @@ export default async function handler(
     }
 
     // 🔹 2. Store in cache
-    cachedData = { timestamp: Date.now(), data: data.data };
+    cachedData = { timestamp: Date.now(), data: data };
     // 6. Success: Send the data back to your frontend
     res.status(200).json(data);
     

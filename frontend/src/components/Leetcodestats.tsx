@@ -130,7 +130,7 @@ const LeetCodeStatsComponent = () => {
     <div>
       <h3>LeetCode Stats</h3>
       <p>Rating: {stats.rating}</p>
-      <p>Among the top {stats.topPercentage} in contest ranks. ({stats.globalRanking} / {stats.totalParticipants})</p>
+      <p>Among the top {stats.topPercentage} % in contest ranks. ({stats.globalRanking} / {stats.totalParticipants})</p>
       <p>Having attained {stats.badge.name} badge</p>
       <p>Questions Solved:</p>
       <ul>
