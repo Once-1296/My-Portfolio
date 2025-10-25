@@ -15,6 +15,18 @@ const Skills: React.FC = () => {
 
   useEffect(() => {
     const fetchCodeforcesStats = async () => {
+const CACHE_KEY = "cfStatsCache";
+  const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+  // Check localStorage cache
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (cached) {
+    const { timestamp, data } = JSON.parse(cached);
+    if (Date.now() - timestamp < CACHE_TTL) {
+      console.log("✅ Using cached Codeforces data");
+      return data;
+    }
+  }
       try {
         const res = await fetch(
           "https://codeforces.com/api/user.info?handles=Awwab_coder123"

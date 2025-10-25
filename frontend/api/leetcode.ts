@@ -35,6 +35,9 @@ interface LeetCodeGraphQLResponse {
   data: LeetCodeData;
   errors?: Array<{ message: string }>; // Optional errors array
 }
+// --- simple in-memory cache ---
+let cachedData: { timestamp: number; data: LeetCodeData } | null = null;
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours in ms
 
 // --- The Serverless Function ---
 
@@ -47,7 +50,10 @@ export default async function handler(
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
-
+  // 🔹 1. Return cached data if still valid
+  if (cachedData && Date.now() - cachedData.timestamp < CACHE_TTL) {
+    return res.status(200).json({ ...cachedData.data, cached: true });
+  }
   // 2. Define the GraphQL query
   const query = `
     query getUserProfile($username: String!) {
@@ -100,6 +106,8 @@ export default async function handler(
         .json({ message: 'GraphQL error', details: data.errors });
     }
 
+    // 🔹 2. Store in cache
+    cachedData = { timestamp: Date.now(), data: data.data };
     // 6. Success: Send the data back to your frontend
     res.status(200).json(data);
     

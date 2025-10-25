@@ -52,7 +52,6 @@ interface ProcessedStats {
     name:string,
     },
 }
-
 // --- Your Component ---
 
 const LeetCodeStatsComponent = () => {
@@ -99,7 +98,6 @@ const LeetCodeStatsComponent = () => {
     topPercentage: ranking.topPercentage,
     badge:ranking.badge?ranking.badge:{"name":"Knight"},
         });
-
       } catch (err) {
         console.error('❌ Error fetching LeetCode stats:', err);
         if (isAxiosError(err)) {
